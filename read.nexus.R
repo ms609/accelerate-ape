@@ -1,4 +1,4 @@
-read.nexus.fast <- function (file, tree.names = NULL) {
+read.nexus <- function (file, tree.names = NULL) {
     X <- scan(file = file, what = "", sep = "\n", quiet = TRUE)
     LEFT <- grep("\\[", X)
     RIGHT <- grep("\\]", X)
@@ -160,7 +160,6 @@ clado.build <- function (tp) {
     nb.edge <- nb.node + nb.tip
     node.label <- character(nb.node)
     tip.label <- character(nb.tip)
-    ### edge <- matrix(NA_integer_, nb.edge, 2L) ##DEL
     parent <- rep(NA_integer_, nb.edge)
     child <- parent
     node <- nb.tip + 1L
@@ -217,36 +216,10 @@ clado.build <- function (tp) {
             })
         )
     }
-    edge <- cbind(parent, child)[-nb.edge, ]
+    edge <- matrix(c(parent, child), nrow=nb.edge, ncol=2)[-nb.edge, ]
     obj <- list(edge = edge, tip.label = tip.label, Nnode = nb.node, node.label = node.label)
     obj$node.label <- if (all(obj$node.label == "NA")) NULL else gsub("^NA", "", obj$node.label)
     class(obj) <- "phylo"
     attr(obj, "order") <- "cladewise"
     obj
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
